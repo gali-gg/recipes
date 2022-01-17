@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon">
+    <title>Recipes.com</title>
+</head>
+
+<body>
+    <nav>
+        <img src="logo.png" alt="logo" id="logo">
+        <ul>
+            <li><a href="#all-recipes-page">All Recipes</a> </li>
+            <li><a href="#favourite-recipes-page">Favourites</a> </li>
+            <li><a href="#create-recipe-page">Add a Recipe</a> </li>
+            <li><a href="#my-profile-page">Profile Page</a> </li>
+        </ul>
+        <div id="profile-picture-container">
+            <img src="guest.png" alt="profile picture" id="profile-picture">
+        </div>
+    </nav>
+
+    <main>
+        <div id="login-page">
+            <form action="" id="login-form">
+                <p id="login-error">Wrong username/password!</p>
+                <input type="text" name="" id="login-username" placeholder="username">
+                <input type="password" name="" id="login-password" placeholder="password">
+                <div class="form-buttons">
+                    <input type="button" value="Login" id="login-button">
+                    <input type="button" value="Go to register" id="registerPage-button">
+                </div>
+            </form>
+        </div>
+        <div id="register-page">
+            <form action="" id="register-form">
+                <p id="register-success">Registration complete! You can now login.</p>
+                <p id="disclaimer">This website is not secure! Do not use a real password for registration!</p>
+                <p id="register-error"></p>
+                <input type="text" name="" id="register-username" placeholder="username">
+                <input type="password" name="" id="register-password1" placeholder="password">
+                <input type="password" name="" id="register-password2" placeholder="repeat password">
+                <div class="form-buttons">
+                    <input type="button" value="Register" id="register-button">
+                    <input type="button" value="Go to login" id="loginPage-button">
+                </div>
+            </form>
+        </div>
+        <div id="main">
+            <div class="selected-page" id="all-recipes-page">
+                <div id="search-select-container">
+                    <input type="search" name="" id="search-recipes" placeholder="Search recipes">
+                    <div id="select-container"></div>
+                </div>
+                <div class="all-recipe-cards" id="all-recipes-container"></div>
+            </div>
+            <div class="selected-page all-recipe-cards" id="favourite-recipes-page">
+                <div class="all-recipe-cards"></div>
+            </div>
+            <div class="selected-page" id="create-recipe-page">
+                <form action="" id="create-recipe-form">
+                    <p id="recipe-message">Recipe created!</p>
+                    <label for="title">
+                        Recipe name:
+                    </label>
+                    <input type="text" name="" id="title">
+
+                    <label for="ingredients">
+                        Ingredients:
+                    </label>
+                    <textarea name="" id="ingredients" cols="30" rows="10"></textarea>
+                    <label for="link">
+                        Link to recipe:
+                    </label>
+                    <input type="url" name="" id="link">
+
+                    <label for="image">
+                        Recipe image:
+                    </label>
+                    <input type="url" name="" id="image">
+                    <input type="submit" class="form-buttons" id="submit-recipe" value="Create recipe" disabled>
+                </form>
+            </div>
+            <div class="selected-page" id="my-profile-page">
+                <button id="logout-button">Log Out</button>
+                <form action="" id="update-profile-form">
+                    <p id="profile-update-message">Profile updated!</p>
+                    <label for="username">
+                        User name:
+                    </label>
+                    <input type="text" name="" id="username">
+
+                    <label for="age">
+                        Age:
+                    </label>
+                    <input type="number" name="" id="age">
+                    <label for="address">
+                        Address:
+                    </label>
+                    <input type="text" name="" id="address">
+
+                    <label for="new-picture">
+                        Profile picture URL:
+                    </label>
+                    <input type="url" name="" id="new-picture">
+                    <input type="submit" class="form-buttons" id="submit-profile" value="Save changes">
+                </form>
+                <div id="recipes-table">
+
+                </div>
+            </div>
+            <div class="selected-page" id="error-page">404 Няма такава страница!</div>
+        </div>
+    </main>
+
+
+    <footer>
+        <p>Website created by: Galya Georgieva.</p>
+        <p>All Rights Reserved &copy; 2022</p>
+    </footer>
+
+    <!-- handlebars templates -->
+    <script id="select-template" type="text/x-handlebars-template">
+        <select name="" id="select-ingredient" onchange="filterSelect()">
+            <option value="">Select Ingredient</option>
+            {{#each this}}
+                <option value="{{this}}">{{this}}</option>
+            {{/each}}
+        </select>
+    </script>
+    <script id="recipe-template" type="text/x-handlebars-template">
+        {{#each this as |i iNumber|}}
+            <div class="recipe-card">
+                <p class="cooked-message" id="{{iNumber}}cook">You cooked this recipe!</p>
+                <p class="favourites-message" id="{{iNumber}}like">Added to favourites!</p>
+                <p class="removed-message" id="{{iNumber}}unlike">Removed from favourites!</p>
+                <div class="recipe-photo">
+                    <a href="{{urlAddress}}" target="_blank"><img class="recipe-photo" src="{{photo}}" alt="{{title}}-recipe"></a>
+                </div>
+                <div class="recipe-info recipe-buttons-div">
+                    <h3>{{title}}</h3>
+                    <p>{{ingredients}}</p>
+                </div>
+                <div>
+                    {{#if (isLiked uuid)}}
+                        <button class="unlike-button" onclick="unlikeRecipe('{{uuid}}'); showUnlikeMessage('{{iNumber}}');">Remove from favourites</button>
+                        {{else}}
+                        <button class="like-button" onclick="likeRecipe('{{uuid}}'); showLikeMessage('{{iNumber}}');">Add to favourites</button>
+                    {{/if}}
+                    <button onclick="cookRecipe('{{uuid}}'); showCookMessage('{{iNumber}}');">Cook</button>
+                </div>
+            </div>
+        {{/each}}
+    </script>
+
+    <script id="cookedRecipes-template" type="text/x-handlebars-template">
+        <table id="cooked-table">
+            <thead>
+                <th>Recipe Title</th>
+                <th>Times Cooked</th>
+            </thead>
+            <!-- we need the titleAndTimesCooked result for this section -->
+            {{#each this}}
+                <tr>
+                    <td>{{title}}</td>
+                    <td>{{timesCooked}}</td>
+                </tr>
+            {{/each}}
+        </table>
+
+    </script>
+
+    <!-- using uuid framework to genereate a unique code for each recipe -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.1.0/uuidv4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"
+        integrity="sha512-RNLkV3d+aLtfcpEyFG8jRbnWHxUqVZozacROI4J2F1sTaDqo1dPQYs01OMi1t1w9Y2FdbSCDSQ2ZVdAC8bzgAg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="recipes.js"></script>
+    <script src="services/RecipeService.js"></script>
+    <script src="services/LoggerService.js"></script>
+    <script src="services/UserService.js"></script>
+    <script src="utilities.js"></script>
+    <script src="controller.js"></script>
+    <script src="initializeWebsite.js"></script>
+</body>
+
+</html>

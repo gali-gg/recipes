@@ -3,9 +3,9 @@ let recipeManager = (function () {
         constructor(title, urlAddress, ingredients, photo, uuid = uuidv4()) {
             this.uuid = uuid;
             this.title = title;
-            this.urlAddress = urlAddress;
+            this.urlAddress =  urlAddress;
             this.ingredients = ingredients;
-            this.photo = photo;
+            this.photo = "https://images.weserv.nl/?url=" + photo;
             this.ingredientsArr = ingredients.split(",").map(element => element.trim());
         }
     }
